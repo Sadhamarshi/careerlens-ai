@@ -5,6 +5,7 @@ from sqlalchemy import create_engine, pool
 
 from app.core.database import database_url
 from app.models.base import Base
+import app.models  # Register all ORM models with Base.metadata
 
 
 config = context.config
