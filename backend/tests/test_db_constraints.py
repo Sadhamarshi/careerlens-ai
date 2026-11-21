@@ -187,3 +187,37 @@ def test_deleting_user_cascades_to_profile(db_session):
     )
 
     assert count_after == 0
+def test_repository_creates_and_finds_user(db_session):
+    from app.repositories.user_repository import (
+        create_user,
+        get_user_by_email,
+    )
+
+    user = create_user(
+        db_session,
+        email="Candidate@Example.COM",
+        password_hash="test-only-hash",
+    )
+
+    found = get_user_by_email(
+        db_session,
+        "CANDIDATE@example.com",
+    )
+
+    assert user.id is not None
+    assert user.email == "candidate@example.com"
+    assert found is not None
+    assert found.id == user.id
+
+
+def test_repository_returns_none_for_missing_user(db_session):
+    from app.repositories.user_repository import (
+        get_user_by_email,
+    )
+
+    result = get_user_by_email(
+        db_session,
+        "missing-user@example.com",
+    )
+
+    assert result is None
